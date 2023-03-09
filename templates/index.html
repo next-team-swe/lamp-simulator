@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Lampione</title>
+    <style>
+      #lamp-box {
+        width: 200px;
+        height: 200px;
+        border: 1.5px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lampione</h1>
+    <div id="lamp-box"></div>
+    <h3><div id="subtitle">Lamp ID: N/D, status: N/D, brightness: N/D</div></h3>
+    <script>
+      // Funzione per aggiornare il quadrato in base allo stato del lampione e la luminosità impostata
+      function updateLampBox(lamp_id, lamp_status, brightness) {
+        var subtitle = document.getElementById('subtitle');
+        var status = lamp_status ? "ON" : "OFF";
+        subtitle.innerHTML = "Lamp ID: "+ lamp_id + " status: " + status + ", brightness: "+ brightness;
+
+        var lampBox = document.getElementById('lamp-box');
+        if (lamp_status) {
+          // Acceso: impostare la luminosità del quadrato in base al valore impostato
+          lampBox.style.backgroundColor = "yellow";
+          var brightnessPercent = brightness * 10;
+          lampBox.style.opacity = brightnessPercent / 100;
+        } else {
+          // Spento: impostare la luminosità del quadrato a zero
+          lampBox.style.opacity = 100;
+          lampBox.style.backgroundColor = "black";
+        }
+      }
+
+      // Funzione per effettuare una richiesta GET per ottenere lo stato del lampione e la luminosità impostata
+      function getLampStatus() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              var response = JSON.parse(xhr.responseText);
+              updateLampBox(response.lamp_id, response.lamp_status, response.brightness);
+            }
+          }
+        };
+        xhr.open('GET', '/lamp');
+        xhr.send();
+      }
+
+      // Aggiornare il quadrato ogni 3 secondi
+      setInterval(getLampStatus, 3000);
+    </script>
+  </body>
+</html>
