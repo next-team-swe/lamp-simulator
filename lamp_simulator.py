@@ -13,7 +13,7 @@ lamp_status = False
 # Luminosità del lampione (0 = spento, 1-10 = luminosità impostata)
 brightness = 0
 
-# Configurazione del client MQTT
+""" # Configurazione del client MQTT
 mqtt_broker_address = 'localhost'
 mqtt_broker_port = 1883
 mqtt_topic = 'manage_lamps'
@@ -42,7 +42,7 @@ def on_message(client, userdata, message):
 # Configurazione dei callback MQTT
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
-
+ """
 # API REST per ottenere lo stato del lampione e la luminosità impostata
 @app.route('/lamp', methods=['GET'])
 def get_lamp_status():
@@ -66,6 +66,6 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    mqtt_client.connect(mqtt_broker_address, mqtt_broker_port)
-    mqtt_client.loop_start()
+    #mqtt_client.connect(mqtt_broker_address, mqtt_broker_port)
+    #mqtt_client.loop_start()
     app.run(debug=True)
