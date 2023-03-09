@@ -52,12 +52,13 @@ def get_lamp_status():
 @app.route('/lamp', methods=['POST'])
 def set_lamp_status():
     global lamp_status, brightness
-    data = request.json
-    if (data.get('lamp_id') != lamp_id):
+    data = request.get_json()
+    if (data['lamp_id'] != lamp_id):
         return jsonify({'lamp_id': lamp_id, 'error': 'lamp_id is not the same of this lamp.'}), 400
-    
-    lamp_status = data.get('lamp_status', lamp_status)
-    brightness = data.get('brightness', brightness)
+    if('lamp_status' in data):
+        lamp_status = data['lamp_status']
+    if('brightness' in data):
+        brightness = data['brightness']
     return jsonify({'lamp_id': lamp_id, 'lamp_status': lamp_status, 'brightness': brightness})
 
 # Pagina web che mostra il quadrato sincronizzato con lo stato del lampione e la luminosità impostata
