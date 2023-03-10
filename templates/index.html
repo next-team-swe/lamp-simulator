@@ -12,15 +12,17 @@
     </style>
   </head>
   <body>
-    <h1>Lampione</h1>
+    <h1 id="title">Lampione</h1>
     <div id="lamp-box"></div>
     <h3><div id="subtitle">Lamp ID: N/D, status: N/D, brightness: N/D</div></h3>
     <script>
       // Funzione per aggiornare il quadrato in base allo stato del lampione e la luminosità impostata
-      function updateLampBox(lamp_id, lamp_status, brightness) {
+      function updateLampBox(lamp_id, lamp_status, brightness, ipAddress) {
+        var title = document.getElementById('title');
         var subtitle = document.getElementById('subtitle');
         var status = lamp_status ? "ON" : "OFF";
         subtitle.innerHTML = "Lamp ID: "+ lamp_id + " status: " + status + ", brightness: "+ brightness;
+        title.innerHTML = `IP Address: ${ipAddress}`;
 
         var lampBox = document.getElementById('lamp-box');
         if (lamp_status) {
@@ -42,7 +44,7 @@
           if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
               var response = JSON.parse(xhr.responseText);
-              updateLampBox(response.lamp_id, response.lamp_status, response.brightness);
+              updateLampBox(response.lamp_id, response.lamp_status, response.brightness, response.lamp_ip);
             }
           }
         };
